@@ -368,9 +368,15 @@ with app:
         )
 
 
-public_url = ngrok.connect(port='7860')
+def main():
+    public_url = ngrok.connect(port='7860')
 
-# We launch the app via a custom flask server and specify the port
-app.run_server(port=7860)
+    # Run the gradio app
+    app.run_server(port=7860)
 
-public_url
+    # Print the public URL
+    print('Public URL:', public_url)
+
+
+if __name__ == "__main__":
+    main()
