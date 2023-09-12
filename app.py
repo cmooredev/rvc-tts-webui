@@ -7,6 +7,7 @@ import traceback
 
 import edge_tts
 import gradio as gr
+from pyngrok import ngrok
 import librosa
 import torch
 from fairseq import checkpoint_utils
@@ -62,12 +63,14 @@ def model_data(model_name):
     version = cpt.get("version", "v1")
     if version == "v1":
         if if_f0 == 1:
-            net_g = SynthesizerTrnMs256NSFsid(*cpt["config"], is_half=config.is_half)
+            net_g = SynthesizerTrnMs256NSFsid(
+                *cpt["config"], is_half=config.is_half)
         else:
             net_g = SynthesizerTrnMs256NSFsid_nono(*cpt["config"])
     elif version == "v2":
         if if_f0 == 1:
-            net_g = SynthesizerTrnMs768NSFsid(*cpt["config"], is_half=config.is_half)
+            net_g = SynthesizerTrnMs768NSFsid(
+                *cpt["config"], is_half=config.is_half)
         else:
             net_g = SynthesizerTrnMs768NSFsid_nono(*cpt["config"])
     else:
@@ -141,7 +144,8 @@ def tts(
     print(tts_text)
     print(f"tts_voice: {tts_voice}")
     print(f"Model name: {model_name}")
-    print(f"F0: {f0_method}, Key: {f0_up_key}, Index: {index_rate}, Protect: {protect}")
+    print(
+        f"F0: {f0_method}, Key: {f0_up_key}, Index: {index_rate}, Protect: {protect}")
     try:
         if limitation and len(tts_text) > 280:
             print("Error: Text too long")
@@ -238,7 +242,8 @@ with app:
     gr.Markdown(initial_md)
     with gr.Row():
         with gr.Column():
-            model_name = gr.Dropdown(label="Model", choices=models, value=models[0])
+            model_name = gr.Dropdown(
+                label="Model", choices=models, value=models[0])
             f0_key_up = gr.Number(
                 label="Transpose (the best value depends on the models and speakers)",
                 value=0,
@@ -281,7 +286,8 @@ with app:
                 step=10,
                 interactive=True,
             )
-            tts_text = gr.Textbox(label="Input Text", value="これは日本語テキストから音声への変換デモです。")
+            tts_text = gr.Textbox(label="Input Text",
+                                  value="これは日本語テキストから音声への変換デモです。")
         with gr.Column():
             but0 = gr.Button("Convert", variant="primary")
             info_text = gr.Textbox(label="Output info")
@@ -362,4 +368,9 @@ with app:
         )
 
 
-app.launch(inbrowser=True)
+public_url = ngrok.connect(port='7860')
+
+# We launch the app via a custom flask server and specify the port
+app.run_server(port=7860)
+
+public_url
