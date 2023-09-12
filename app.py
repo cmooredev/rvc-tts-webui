@@ -21,6 +21,9 @@ from lib.infer_pack.models import (
 )
 from rmvpe import RMVPE
 from vc_infer_pipeline import VC
+import nest_asyncio
+
+nest_asyncio.apply()
 
 logging.getLogger("fairseq").setLevel(logging.WARNING)
 logging.getLogger("numba").setLevel(logging.WARNING)
