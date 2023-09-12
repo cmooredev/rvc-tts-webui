@@ -7,4 +7,4 @@ numpy==1.23.5
 praat-parselmouth==0.4.3
 pyworld==0.3.4
 torchcrepe==0.0.20
-pyngrok==5.1.5
+pyngrok==5.1.0

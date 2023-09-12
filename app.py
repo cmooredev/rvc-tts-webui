@@ -21,6 +21,8 @@ from lib.infer_pack.models import (
 )
 from rmvpe import RMVPE
 from vc_infer_pipeline import VC
+import nest_asyncio
+nest_asyncio.apply()
 
 logging.getLogger("fairseq").setLevel(logging.WARNING)
 logging.getLogger("numba").setLevel(logging.WARNING)
@@ -33,7 +35,7 @@ limitation = os.getenv("SYSTEM") == "spaces"
 config = Config()
 
 edge_output_filename = "edge_output.mp3"
-tts_voice_list = asyncio.get_event_loop().run_until_complete(edge_tts.list_voices())
+tts_voice_list = asyncio.run(edge_tts.list_voices())
 tts_voices = [f"{v['ShortName']}-{v['Gender']}" for v in tts_voice_list]
 
 model_root = "weights"
