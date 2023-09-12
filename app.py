@@ -21,8 +21,6 @@ from lib.infer_pack.models import (
 )
 from rmvpe import RMVPE
 from vc_infer_pipeline import VC
-import nest_asyncio
-nest_asyncio.apply()
 
 logging.getLogger("fairseq").setLevel(logging.WARNING)
 logging.getLogger("numba").setLevel(logging.WARNING)
@@ -371,13 +369,9 @@ with app:
 
 
 def main():
-    public_url = ngrok.connect(port='7860')
-
-    # Run the gradio app
-    app.run_server(port=7860)
-
-    # Print the public URL
-    print('Public URL:', public_url)
+    # Open gradio app and obtain front-end URL
+    iface = app.launch(share=True)  # This should return a URL
+    print(iface)
 
 
 if __name__ == "__main__":
